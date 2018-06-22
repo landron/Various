@@ -1,5 +1,0 @@
-﻿Dijkstra
-
-Devoir 8 : distances dans la carte
-
-Le dernier devoir reprend les cartes de Mayotte et de France, ainsi que le principe de graphe euclidien : deux villes sont reliées si elles sont à une distance inférieure à un paramètre donné.
