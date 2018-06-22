@@ -1,0 +1,64 @@
+import java.util.Iterator;
+
+// public class RandomizedQueue<Item> implements Iterable<Item> {
+public class RandomizedQueue<Item> {
+	private int mLength;
+	private Item[] mItems;
+
+	public RandomizedQueue() {
+		mItems = (Item[]) new Object[8];
+		assert 8 == mItems.length;
+	}
+
+	public boolean isEmpty() {
+		return 0 == mLength;
+	}
+
+	public int size() {
+		assert mItems.length >= mLength;
+		return mLength;
+	}
+
+	public void enqueue(Item item) {
+		if (null == item)
+            throw new NullPointerException();
+
+        assert mItems.length >= mLength;
+        if (mItems.length == mLength)
+        	mItems = resize(mItems);
+        assert mItems.length > mLength;
+
+        mItems[mLength++] = item;
+	}
+
+	public Item dequeue() {
+		if (0 == mLength)
+            throw new java.util.NoSuchElementException();
+        assert !isEmpty();
+        assert mItems.length >= mLength;
+
+        return null;
+	}
+
+	// TODO:	error: non-static type variable Item cannot be referenced from a static context
+	private Item[] resize(Item[] in) {
+		int length = in.length;
+        Item[] out = (Item[]) new Object[2*length];
+        int i = 0;
+        for (int j = 0; ; i++, j++) {
+        	for (;(j < length) && (null == in[j); j++);
+        	if (j == length)
+        		break;
+            out[i] = in[j];
+        }
+        return out;
+    }
+
+    private static int random(int N) {
+        return 1+(int) (StdRandom.uniform()*N);
+    }
+
+   // public Item sample()                     // return (but do not delete) a random item
+   // public Iterator<Item> iterator()         // return an independent iterator over items in random order
+   // public static void main(String[] args)   // unit testing
+}

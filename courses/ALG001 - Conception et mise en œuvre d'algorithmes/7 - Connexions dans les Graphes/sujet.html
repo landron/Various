@@ -1,0 +1,82 @@
+<!-- pandoc --mathjax index.markdown > index.html -->
+<style type="text/css">blockquote p {font-size:10.5pt; font-weight:normal;}</style>
+<style type="text/css">
+  table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+    margin: 0; padding: 0; vertical-align: baseline; border: none; }
+  table.sourceCode { width: 100%; }
+  td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+  td.sourceCode { padding-left: 5px; }
+  code > span.kw { color: #007020; font-weight: bold; }
+  code > span.dt { color: #902000; }
+  code > span.dv { color: #40a070; }
+  code > span.bn { color: #40a070; }
+  code > span.fl { color: #40a070; }
+  code > span.ch { color: #4070a0; }
+  code > span.st { color: #4070a0; }
+  code > span.co { color: #60a0b0; font-style: italic; }
+  code > span.ot { color: #007020; }
+  code > span.al { color: #ff0000; font-weight: bold; }
+  code > span.fu { color: #06287e; }
+  code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+
+<h1 id="connexions-dans-une-carte">Connexions dans une carte</h1>
+<p>Cette semaine, pour prolonger le cours sur les graphes, nous allons nous intéresser à un graphe tiré du monde réel, qui contient les villes de France et de Mayotte. Le sujet vous permettra de vous familiariser avec une réprésentation possible des graphes (par <em>liste d'adjacence</em>), et d'écrire quelques algorithmes classiques : composantes connexes, recherche de chemins.</p>
+<h3 id="obtenir-le-sujet">Obtenir le sujet</h3>
+<p>Le sujet est disponible <a href="https://d396qusza40orc.cloudfront.net/algoprog/exercices/TD7-2014-ready.zip">en ligne</a>. Téléchargez l'archive, puis extrayez son contenu dans le dossier de votre choix. 
+<h2 id="aperçu-du-devoir">Aperçu du devoir</h2>
+<p>La classe que vous devrez compléter se trouve dans le fichier <code>Test.java</code>. Deux autres classes sont fournies : <code>Ville</code> et <code>Carte</code>. Il n'est pas nécessaire de modifier ces deux classes.</p>
+<p>Nous vous fournissons dans ce devoir des cartes composées de villes, chacune munie d'un nom, d'une latitude et une longitude.</p>
+<p>Il faut juste connaître quelques &quot;méthodes&quot; associées aux villes.</p>
+<p>Pour chaque ville <code>v</code>,</p>
+<ul>
+<li>on obtient son nom par <code>v.getNom()</code></li>
+<li>on obtient la distance avec une autre ville <code>w</code> par <code>v.distance(w)</code></li>
+<li>on obtient la latitude de la ville par <code>v.getLatitude()</code>.
+</ul>
+<h2 id="le-graphe">Le graphe</h2>
+<p>Vous sont données les cartes de Mayotte et de France. A chaque fois, vous obtenez la collection des villes par les instructions déjà écrites dans <code>initMayotte</code> et <code>initFrance</code>.</p>
+<p>Nous allons transformer ces cartes en graphe non-orienté de la manière suivante :</p>
+<ul>
+<li>les sommets sont des villes,</li>
+<li>deux villes sont reliées par une arête si elles sont distantes de moins de <code>minDist</code> ; cette dernière distance paramètre donc le graphe.</li>
+</ul>
+<p>Autrement dit, on peut se déplacer de ville en ville avec des &quot;bottes de <code>minDist</code> lieues&quot;. Un tel graphe qui utilise les distances est dit <i>graphe euclidien</i>.</p>
+<h3 id="représentation">Représentation</h3>
+<p>Pour simplifier au maximum les structures Java utilisées, vous allez recopier les villes dans un tableau appelé <code>villes</code>. Vous dimensionnerez ce tableau à la bonne taille (là encore, l'instruction est donnée).</p>
+<p>Comme vous disposez de ce tableau, vous pouvez ensuite, dans vos calculs, désigner les villes par l'indice correspondant dans le tableau.</p>
+<p>Vous devrez ensuite construire et représenter les arêtes. Vous pouvez utiliser pour cela un autre tableau de listes de villes. Dans ce cas :</p>
+<ul>
+<li>vous pouvez utiliser le type (ou classe) <code>LinkedList<Integer></code> qui est une définition de liste donnée dans la biblothèque Java.</li>
+<li>Dans ce cas, pour chaque ville, vous devez avoir la liste de ses voisins.</li>
+<li>Quand on utilise une <code>LinkedList</code>, il faut commencer par la créer comme <code>new LinkedList();</code></li>
+<li>Ensuite, on peut ajouter des éléments à une liste. Par exemple <code>l.addFirst(e)</code> ajoute <code>e</code> au début de la liste <code>l</code>.</li>
+</ul>
+<p>Pour utiliser une liste, on peut parcourir ses éléments par <code>(for Integer i : l) { ... }</code></p>
+<h2 id="questions">Questions</h2>
+<p>Ce qui vous est demandé, est de compléter le fichier <code>Test.java</code> et pour cela :</p>
+<ol style="list-style-type: decimal">
+<li>de définir les fonctions qui construisent le graphe et le stockent dans les variables globales villes et voisins.</li>
+<li>d'écrire la fonction <code>compteCC</code> qui compte le nombre de composantes connexes.</li>
+<li>d'écrire la fonction <code>relie</code> qui teste s'il existe un chemin entre deux villes.</li>
+</ol>
+<h2 id="optim">Optimisation</h2>
+Vous remarquerez des indications dans le squelette de la fonction <code>construitGraphe</code>. Il s'agit d'une optimisation pour construire le graphe plus vite. Cette optimisation n'est pas nécessaire pour Mayotte, mais utile pour la France à cause du plus grand nombre de villes.
+
+L'idée de cette optimisation est que deux villes qui ont une latitude très différentes seront à une distance grande l'une de l'autre. En particulier, est calculé une valeur <code>latDist</code>; si la différence entre les latitudes de deux villes est plus grande que <code>latDist</code>, alors elles seront à une distance de plus de <code>minDist</code>. A vous d'utiliser cette remarque, par exemple en triant le tableau <code>villes</code>.
+
+<h2 id="stack">Taille de la pile</h2>
+La manière la plus simple de programmer la parcours en profondeur (DFS) est d'utiliser une fonction récursive, comme montré dans les vidéos. Dans le cas de la carte de France, le grand nombre de villes fait que la taille allouée par défaut pour la <i>pile des appels récursifs</i> peut être insuffisante. Vous verrez vraisemblablement des messages d'erreurs indiquant un <i>"Stack overflow"</i> (débordement de pile). 
+
+La manière simple d'y remédier, est de lancer votre programme en augmentant la taille de la pile. Il faut pour cela ajouter une option lors du lancement du programme. Une option <code>-Xss4m</code> alloue un espace mémoire de 4 méga-octets pour la pile, ce  qui devrait être suffisant. Pour ajouter cette option :
+<ul>
+<li>Si vous lancez votre programme avec une ligne de commande, l'option est ajoutée dans la ligne de commande; par exemple : <code>java -Xss4m Test</code>.</li>
+<li>Si vous travaillez dans l'environnement Netbeans, il faut :
+ <ol>
+ <li>Faire un clic droit sur le projet,</li>
+ <li>sélectionner <code>Run</code>,</li>
+ <li>ajouter l'option <code>-Xss4m</code> dans la case "VM options".</li>
+</ol>
+</li>
+<li>avec d'autres environnements intégrés, vous aurez certainement une manipulation similaire à faire.</li>
+</ul>
